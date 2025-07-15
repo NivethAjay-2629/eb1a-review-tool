@@ -8,12 +8,12 @@ def extract_text_from_docx(docx_file):
     return "\n".join([para.text for para in doc.paragraphs if para.text.strip()])
 
 def split_into_projects(text):
-    # More flexible project header detection
-    project_headers = re.split(r'(?i)(project\s*\d+[:\s\-]*)', text)
+    # Enhanced logic to detect multiple project boundaries
+    split_candidates = re.split(r'(?i)(Project\s*\d+[:\s\-]*|Organization:\s*)', text)
     projects = []
-    for i in range(1, len(project_headers), 2):
-        title = project_headers[i].strip()
-        content = project_headers[i + 1].strip() if i + 1 < len(project_headers) else ""
+    for i in range(1, len(split_candidates), 2):
+        title = split_candidates[i].strip()
+        content = split_candidates[i + 1].strip() if i + 1 < len(split_candidates) else ""
         if len(content) > 100:
             projects.append((title, content))
     return projects
